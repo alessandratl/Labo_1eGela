@@ -151,51 +151,34 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    porVisitar = util.PriorityQueue()
-    visitados = []
-   ## inicio = problem.getStartState()
-    visitados.append(problem.getStartState())
-   
-    print(visitados)
-    if problem.isGoalState(problem.getStartState()):
-         return []
-    #print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    #print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-   
-    
-    #print(problem.getSuccesors(inicio))
     inicio = problem.getStartState()
-    print("NODO INICIAL: ")
-    print(inicio)
-    sucesores = problem.getSuccessors(inicio)
-    print(sucesores)
-   
-    for sucesor in sucesores:
-        print(sucesor[2])
-        porVisitar.update(sucesor,sucesor[2])
+    if problem.isGoalState(inicio):
+        return[]
 
+    porVisitar = util.PriorityQueue() #utilizaremos una cola prioritaria
+    porVisitar.push((inicio, []), 0)  # (estado actual, camino), coste acumulado
+    visitados = []
 
     while not porVisitar.isEmpty():
+        actual, camino = porVisitar.pop()
 
-        nodo_actual= porVisitar.pop()
-        print(nodo_actual)
-        if problem.isGoalState(nodo_actual[0]):
-             return print("es el objetivo") ##falta devolver camino
-        print(nodo_actual[0])
-        visitados.append(nodo_actual[0])
-        sucesores = problem.getSuccesors(nodo_actual[0])
-        
-        for sucesor in sucesores:
-             porVisitar.update(sucesor,sucesor[2])
-             
-        print(nodo_actual)
+        if actual in visitados:
+            continue
 
+        visitados.append(actual)
 
-    util.raiseNotDefined()
+        if problem.isGoalState(actual):
+            print("Camino encontrado: ", camino)  # imprimir el camino recorrido
+            return camino
 
+        for siguiente, accion, coste in problem.getSuccessors(actual):
+            nuevo_coste = coste + problem.getCostOfActions(camino + [accion])
+            print("Coste acumulado: ", nuevo_coste) #imprimir el coste acumulado
+            nuevo_camino = camino + [accion]
+            porVisitar.push((siguiente, nuevo_camino), nuevo_coste)
 
+    return []
 
-    
 
 
 def nullHeuristic(state, problem=None):
