@@ -89,51 +89,64 @@ def depthFirstSearch(problem):
 
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
-
+    """
+    """
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+
+    """print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's succesors:", problem.getSuccessors(problem.getStartState()))"""
+
+
     inicio = problem.getStartState()
-    porVisitar= util.Stack()
+    if problem.isGoalState(inicio):
+        return []
+
+    porVisitar = util.Stack() #utilizamos una pila
     visitados = []
     porVisitar.push((inicio,[]))
-    if problem.isGoalState(inicio):
-        return[]
-    	
+
     while not porVisitar.isEmpty():
         actual, camino = porVisitar.pop()
         if actual not in visitados:
             visitados.append(actual)
             if problem.isGoalState(actual):
+                print("Camino encontrado: ", camino) #imprimir el camino recorrido
                 return camino
-            print(actual)
-            for siguienteNodo, paso, coste in problem.getSuccesors(actual):
-                siguientePaso = camino + [paso]
-                porVisitar.push((siguienteNodo, siguientePaso))
-    	
+            for siguiente, accion, coste in problem.getSuccessors(actual):
+                caminoSiguiente = camino + [accion]
+                porVisitar.push((siguiente, caminoSiguiente ))
+
+
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    pils =util.Stack()
-    visitados=[]
+    """print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's succesors:", problem.getSuccessors(problem.getStartState()))"""
+
     inicio = problem.getStartState()
-    pila.push((inicio,[]))
-   
     if problem.isGoalState(inicio):
-    	return[]
-    
-    while not pila.isEmpty():
-        actual, camino = pila.pop()
+        return []
+
+    porVisitar= util.Queue() #utilizamos una cola
+    visitados = []
+    porVisitar.push((inicio, []))
+
+    while not porVisitar.isEmpty():
+        actual, camino = porVisitar.pop()
         if actual not in visitados:
             visitados.append(actual)
             if problem.isGoalState(actual):
+                print("Camino encontrado: ", camino)  # imprimir el camino recorrido
                 return camino
-    
-    util.raiseNotDefined()  
-
-
+            for siguiente, accion, coste in problem.getSuccessors(actual):
+                siguientePaso = camino + [accion]
+                porVisitar.push((siguiente, siguientePaso))
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
