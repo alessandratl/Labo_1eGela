@@ -302,9 +302,9 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
-        #self.inicio == startingGameState
+        #self.startingGameState = startingGameState
         
-        esquinaVisitadas = [False,False,False,False] #tupla que corresponde a cada corner
+        esquinaVisitadas = [False,False,False,False] #lisa que corresponde a cada corner
 
         if self.startingPosition == self.corners[0]: #miramos a ver si la posicion inicial es un corner 
             esquinaVisitadas[0] = True
@@ -357,11 +357,12 @@ class CornersProblem(search.SearchProblem):
             x, y = state[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
-            if not self.walls[nextx][nexty]:
+            hitsWall = self.walls[nextx][nexty]
+            if not hitsWall:
                 
                 siguienteEstado = (nextx, nexty)
 
-                esquinasVisitadas = state[1]
+                esquinasVisitadas = list(state[1])
                 print(esquinasVisitadas)
 
                 if siguienteEstado == self.corners[0]:
@@ -375,7 +376,7 @@ class CornersProblem(search.SearchProblem):
 
                 
                 cost = 1
-                successors.append(((siguienteEstado,esquinasVisitadas), action, cost))
+                successors.append(((siguienteEstado,list(esquinasVisitadas)), action, cost))
                 
 
         # Bookkeeping for display purposes
