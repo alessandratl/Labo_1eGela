@@ -290,6 +290,7 @@ class CornersProblem(search.SearchProblem):
         """
         Stores the walls, pacman's starting position and corners.
         """
+        #self.costFn = costFn
         self.walls = startingGameState.getWalls()
         self.startingPosition = startingGameState.getPacmanPosition()
         top, right = self.walls.height - 2, self.walls.width - 2
@@ -314,7 +315,7 @@ class CornersProblem(search.SearchProblem):
         if self.startingPosition == self.corners[3]:
             esquinaVisitadas[3] = True
 
-        self.inicioEstado = (self.startingPosition, tuple(esquinaVisitadas)) #el estado inicio es la posicion y la tupla de esquinas visitadas si son true o false cada esquina
+        self.inicioEstado = (self.startingPosition, list(esquinaVisitadas)) #el estado inicio es la posicion y la tupla de esquinas visitadas si son true o false cada esquina
 
         
 
@@ -353,6 +354,36 @@ class CornersProblem(search.SearchProblem):
 
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            x, y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                
+                siguienteEstado = (nextx, nexty)
+
+                esquinasVisitadas = state[1]
+                print(esquinasVisitadas)
+
+                if siguienteEstado == self.corners[0]:
+                    esquinasVisitadas[0]=True
+                if siguienteEstado == self.corners[1]:
+                    esquinasVisitadas[1]=True
+                if siguienteEstado == self.corners[2]:
+                    esquinasVisitadas[2]=True
+                if siguienteEstado == self.corners[3]:
+                    esquinasVisitadas[3]=True
+
+                
+                cost = 1
+                successors.append(((siguienteEstado,esquinasVisitadas), action, cost))
+                
+
+        # Bookkeeping for display purposes
+        self._expanded += 1  # DO NOT CHANGE
+        return successors
+
+        """successors = []
+        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
             #   x,y = currentPosition
@@ -364,6 +395,7 @@ class CornersProblem(search.SearchProblem):
 
         self._expanded += 1  # DO NOT CHANGE
         return successors
+        """
 
     def getCostOfActions(self, actions):
         """
