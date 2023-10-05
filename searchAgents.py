@@ -301,6 +301,22 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        #self.inicio == startingGameState
+        
+        esquinaVisitadas = [False,False,False,False] #tupla que corresponde a cada corner
+
+        if self.startingPosition == self.corners[0]: #miramos a ver si la posicion inicial es un corner 
+            esquinaVisitadas[0] = True
+        if self.startingPosition == self.corners[1]:
+            esquinaVisitadas[1] = True
+        if self.startingPosition == self.corners[2]:
+            esquinaVisitadas[2] = True
+        if self.startingPosition == self.corners[3]:
+            esquinaVisitadas[3] = True
+
+        self.inicioEstado = (self.startingPosition, tuple(esquinaVisitadas)) #el estado inicio es la posicion y la tupla de esquinas visitadas si son true o false cada esquina
+
+        
 
     def getStartState(self):
         """
@@ -308,6 +324,8 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
+        return self.inicioEstado
+        
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -315,6 +333,11 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
+        cornerActualEsquinas = state[1]
+        if cornerActualEsquinas[0] and cornerActualEsquinas[1] and cornerActualEsquinas[2] and cornerActualEsquinas[3]:
+            return True
+        else:
+            return False
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
