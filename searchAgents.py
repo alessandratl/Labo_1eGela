@@ -429,8 +429,27 @@ def cornersHeuristic(state, problem):
     walls = problem.walls  # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0  # Default to trivial solution
 
+    visitadas = state[1]
+    porVisitar = []
+
+    for corner in corners:
+        if corner not in visitadas:
+            porVisitar.append(corner)
+
+    coste_heur = float('inf') # inicializamos el coste heuristico como infinito para asegurarnos que todas las que calculemos sean menores
+    actual = state[0]
+
+    for corner in porVisitar:
+        #Calculamos la distancia de Manhattan
+        distancia = abs(actual[0] - corner[0]) + abs(actual[1] - corner[1])
+
+        #Comprobamos que la distancia es menor que la actual
+        if distancia < coste_heur:
+            coste_heur = distancia #actualizaos el coste heuristico
+            c = corner
+
+    return coste_heur
 
 class AStarCornersAgent(SearchAgent):
     """A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"""
@@ -532,7 +551,17 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    posicionesComida = foodGrid.asList() # lista de las posiciones de la comida
+    comida_restante = len(posicionesComida) #cantidad de comidas restantes
+
+
+    if comida_restante == 0:
+        return 0 # si no queda comida la distancia es 0
+
+    distancia = min(util.manhattanDistance(position, food) for food in posicionesComida)
+    estimado = distancia + comida_restante -1
+
+    return estimado
 
 
 class ClosestDotSearchAgent(SearchAgent):
