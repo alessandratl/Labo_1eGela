@@ -35,6 +35,7 @@ Good luck and happy searching!
 """
 
 import time
+from math import sqrt
 
 import search
 import util
@@ -442,9 +443,11 @@ def cornersHeuristic(state, problem):
 
     for corner in porVisitar:
         #Calculamos la distancia de Manhattan
-        distancia = abs(actual[0] - corner[0]) + abs(actual[1] - corner[1])
+        distancia = abs(actual[0] - corner[0]) + abs(actual[1] - corner[1]) #1653 nodos expandidos
 
-        #distancia = (actual[0] - corner[0]) * (actual[0] - corner[0]) + (actual[1] - corner[1]) * (actual[1] - corner[1])
+        #distancia = sqrt((actual[0] - corner[0])**2 + (actual[1] - corner[1])**2)  #1685 nodos expandidos
+
+        #distancia = (actual[0] - corner[0])**2 + (actual[1] - corner[1])**2  #1398 nodos expandidos
 
         #Comprobamos que la distancia es menor que la actual
         if distancia < coste_heur:
@@ -560,7 +563,9 @@ def foodHeuristic(state, problem):
     if comida_restante == 0:
         return 0 # si no queda comida la distancia es 0
 
-    distancia = min(util.manhattanDistance(position, food) for food in posicionesComida)
+    distancia = min(util.manhattanDistance(position, food) for food in posicionesComida) #10908 nodos expandidos
+    #distancia = min(sqrt((position[0] - c[0]) ** 2 + (position[1] - c[1]) ** 2) for c in posicionesComida) #11039 nodos expandidos
+    #distancia = min((position[0] - c[0])**2 + (position[1] - c[1])**2 for c in posicionesComida) #23754 nodos expandidos
     estimado = distancia + comida_restante -1
 
     return estimado
