@@ -444,6 +444,8 @@ def cornersHeuristic(state, problem):
         #Calculamos la distancia de Manhattan
         distancia = abs(actual[0] - corner[0]) + abs(actual[1] - corner[1])
 
+        #distancia = (actual[0] - corner[0]) * (actual[0] - corner[0]) + (actual[1] - corner[1]) * (actual[1] - corner[1])
+
         #Comprobamos que la distancia es menor que la actual
         if distancia < coste_heur:
             coste_heur = distancia #actualizaos el coste heuristico
@@ -628,9 +630,10 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         The state is Pacman's position. Fill this in with a goal test that will
         complete the problem definition.
         """
-        x, y = state
+        x, y = state[0]
 
         "*** YOUR CODE HERE ***"
+        return self.food[x][y]
         util.raiseNotDefined()
 
 

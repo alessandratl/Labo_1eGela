@@ -217,7 +217,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         for siguiente, accion, coste in problem.getSuccessors(actual):
             #nuevo_coste = coste + problem.getCostOfActions(camino + [accion])
             nuevo_coste = coste + costeAcumulado
-            print("Coste acumulado: ", nuevo_coste) #imprimir el coste acumulado
+            #print("Coste acumulado: ", nuevo_coste) #imprimir el coste acumulado
             nuevo_camino = camino + [accion]
             heuristico= nuevo_coste + heuristic(siguiente, problem)
             porVisitar.push((siguiente, nuevo_camino, nuevo_coste), heuristico)
