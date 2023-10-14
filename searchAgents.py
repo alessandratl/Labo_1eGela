@@ -35,7 +35,6 @@ Good luck and happy searching!
 """
 
 import time
-from math import sqrt
 
 import search
 import util
@@ -305,7 +304,7 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE ***"
         #self.startingGameState = startingGameState
         
-        esquinaVisitadas = [False,False,False,False] #lisa que corresponde a cada corner
+        esquinaVisitadas = [False,False,False,False] #lista que corresponde a cada corner
 
         if self.startingPosition == self.corners[0]: #miramos a ver si la posicion inicial es un corner 
             esquinaVisitadas[0] = True
@@ -430,31 +429,64 @@ def cornersHeuristic(state, problem):
     walls = problem.walls  # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
+    
+    #las coordenadas de las esquinas
+    cornersComido = state[1] ##la tupla [False, False,False, False]
+    posPacman = state[0] #
+    coste_heur = 0 #el valor heuristico que vamos a returnear
 
-    visitadas = state[1]
-    porVisitar = []
+    esquinasSinComer = [] ##vamos a guardar las coordenas que tienen comida
 
-    for corner in corners:
-        if corner not in visitadas:
-            porVisitar.append(corner)
+    for index in range(4):
+        if not cornersComido[index]:
+            esquinasSinComer.append(corners[index])
+    
+    if esquinasSinComer==[]:
+        #si no hay comida, no se necesita mover 
+        return 0
+    
+    #ahora se supone que hay al menos una comida
 
-    coste_heur = float('inf') # inicializamos el coste heuristico como infinito para asegurarnos que todas las que calculemos sean menores
-    actual = state[0]
+    distanciaMin= float('inf')
+    esquinaMasCercana = -1
+    esquinaAct = 0
 
-    for corner in porVisitar:
-        #Calculamos la distancia de Manhattan
-        distancia = abs(actual[0] - corner[0]) + abs(actual[1] - corner[1]) #1653 nodos expandidos
+    for corner in esquinasSinComer:
+        distanciaEntreAmbos = util.manhattanDistance(corner, posPacman)
 
-        #distancia = sqrt((actual[0] - corner[0])**2 + (actual[1] - corner[1])**2)  #1685 nodos expandidos
+        if distanciaEntreAmbos < distanciaMin:
+            distanciaMin=distanciaEntreAmbos
+            esquinaMasCercana=esquinaAct
+        esquinaAct+=1
+    coste_heur =coste_heur+distanciaMin
+    #####################33
+    #elemento= esquinasSinComer[esquinaMasCercana]
+    esquinaEvaluada = esquinasSinComer.pop(esquinaMasCercana)##hay q borrar segun el indice
+######################
+    if esquinasSinComer == []:
+        return coste_heur
 
-        #distancia = (actual[0] - corner[0])**2 + (actual[1] - corner[1])**2  #1398 nodos expandidos
+    while esquinasSinComer!=[]:
+        distanciaMin= float('inf')
+        esquinaAct = 0
+        esquinaMasCercana =-1
+        for esquina in esquinasSinComer:
+            distanciaEntreAmbos = util.manhattanDistance(esquinaEvaluada,esquina)
 
-        #Comprobamos que la distancia es menor que la actual
-        if distancia < coste_heur:
-            coste_heur = distancia #actualizaos el coste heuristico
-            c = corner
+            if distanciaEntreAmbos < distanciaMin:
+                distanciaMin = distanciaEntreAmbos
+                esquinaMasCercana = esquinaAct
+            esquinaAct+=1
+        ##########################
+        #elemento= esquinasSinComer[esquinaMasCercana]
+        esquinaEvaluada =esquinasSinComer.pop(esquinaMasCercana) #aqui problema
+        coste_heur =coste_heur + distanciaMin
 
     return coste_heur
+
+
+
+    
 
 class AStarCornersAgent(SearchAgent):
     """A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"""
@@ -563,9 +595,7 @@ def foodHeuristic(state, problem):
     if comida_restante == 0:
         return 0 # si no queda comida la distancia es 0
 
-    distancia = min(util.manhattanDistance(position, food) for food in posicionesComida) #10908 nodos expandidos
-    #distancia = min(sqrt((position[0] - c[0]) ** 2 + (position[1] - c[1]) ** 2) for c in posicionesComida) #11039 nodos expandidos
-    #distancia = min((position[0] - c[0])**2 + (position[1] - c[1])**2 for c in posicionesComida) #23754 nodos expandidos
+    distancia = min(util.manhattanDistance(position, food) for food in posicionesComida)
     estimado = distancia + comida_restante -1
 
     return estimado
@@ -600,8 +630,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        path = search.bfs(problem)
-        return path
+        util.raiseNotDefined()
 
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -639,7 +668,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x, y = state
 
         "*** YOUR CODE HERE ***"
-        return self.food[x][y]
+        util.raiseNotDefined()
 
 
 def mazeDistance(point1, point2, gameState):
