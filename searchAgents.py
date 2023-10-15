@@ -613,6 +613,7 @@ class ClosestDotSearchAgent(SearchAgent):
             for action in nextPathSegment:
                 legal = currentState.getLegalActions()
                 if action not in legal:
+                    ##t = (str(action), str(currentState))###he movido
                     raise Exception(f'findPathToClosestDot returned an illegal move: {action}!\n{currentState}')
                 currentState = currentState.generateSuccessor(0, action)
         self.actionIndex = 0
@@ -630,8 +631,10 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        path = search.bfs(problem)
+        return path
         util.raiseNotDefined()
-
+    
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -668,6 +671,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x, y = state
 
         "*** YOUR CODE HERE ***"
+        return self.food[x][y]
         util.raiseNotDefined()
 
 
